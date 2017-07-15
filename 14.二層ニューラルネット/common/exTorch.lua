@@ -73,3 +73,21 @@ function getElement(readTensor,...)
     end
     return torch.Tensor(elelist)
 end
+
+---最大値二値化関数
+-- 各行に対して最大値の要素を1,それ以外の要素を0とする
+-- @param t 二値化するテンソル (Type：tensor)
+-- @return 二値化されたテンソル (Type：Tensor)
+function thresMaxTensor(t)
+    local t_value, t_indices = torch.max(t, 2)
+    for row = 1, t:size()[1] do
+        for col = 1, t:size()[2] do
+            if col == t_indices[row][1] then
+                t[row][col] = 1
+            else
+                t[row][col] = 0
+            end
+        end
+    end
+    return t
+end

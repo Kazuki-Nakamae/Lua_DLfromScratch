@@ -11,12 +11,33 @@ function softmax(x)
     return y
 end
 
----交差エントロピー誤差算出関数
+---シグモイド関数.
+-- 入力の各成分に対するゲイン1の標準シグモイド関数（1/(1+exp(x))）の値を返す
+-- @param x 入力 (Type：torch.DoubleTensor)
+-- @return torch.DoubleTensor
+function sigmoid(x)
+    y = x:clone():fill(1)
+    return torch.cdiv(y , (1 + torch.exp(-x)))
+end
+
+---ReLU(Rectified Linear Unit)関数.
+-- 入力の各成分が0以下ならば0、0よりも高いならばそのままの値を返す
+-- @param x 入力 (Type：torch.DoubleTensor)
+-- @return torch.DoubleTensor
+function relu(x)
+    y = x:clone():fill(0)
+    return torch.cmax(y, x)
+end
+
+---バッチ対応版交差エントロピー誤差算出関数
 -- テンソル同士の交差エントロピー誤差(-∑tilogyi)を求める
 -- @param y 入力１、今回はNNが出力する確率リスト {Type:Tensor}
 -- @param t 入力２、今回は正解ラベルリスト {Type:ByteTensor}
 -- @return 交差エントロピー誤差 {Type:number}
 function cross_entropy_error(y, t)
-    local delta = 1e-7
-    return -torch.cmul(t:double(), ( y:double() + delta ):log() ):sum()
+    if y:dim() == 1 then
+        y = y:resize(1,y:nElement())
+    end
+    local batch_size = y:size()[1]
+    return -( y:log():cmul(t) ):sum() / batch_size
 end

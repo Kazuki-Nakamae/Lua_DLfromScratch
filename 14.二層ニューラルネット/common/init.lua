@@ -10,13 +10,16 @@ local common = {}
 
 local help = {
 softmax = [[softmax(x) -- Normalize input Tencor]],
+sigmoid = [[sigmoid(x) -- the sigmoid of input Tencor]],
+relu = [[relu(x) -- the ReLU of input Tencor]],
 cross_entropy_error = [[cross_entropy_error(y, t) -- Calculate the cross entropy between y and t]],
 numerical_gradient = [[numerical_gradient(f, X) -- Calculate gradient of a given function f(X)]],
 mulTensor = [[mulTensor(A, B) -- Calculate multiple of tensor A and tensor B]],
 tensor2scalar = [[tensor2scalar(tensor) -- Convert tensor to scalar]],
 makeIterTensor = [[makeIterTensor(vector,iter) -- Generate tensor whose rows are repeated]],
 getRandIndex = [[getRandIndex(datasize,getsize,seed) -- Get random index of tensor which have elements of datasize]],
-getElement = [[getElement(readTensor,...) -- Get value of readTensor[...]. When #{...}>=2, Access value of readTensor according to each value of elements in {...}]]
+getElement = [[getElement(readTensor,...) -- Get value of readTensor[...]. When #{...}>=2, Access value of readTensor according to each value of elements in {...}]],
+thresMaxTensor = [[thresMaxTensor(t) -- threshold Tensor by maximum value]]
 }
 
 common.softmax = function(x)
@@ -26,6 +29,24 @@ common.softmax = function(x)
                 help.softmax)
   end
   return softmax(x)
+end
+
+common.sigmoid = function(x)
+  if not x then
+    xlua.error('x must be supplied',
+                'common.sigmoid', 
+                help.sigmoid)
+  end
+  return sigmoid(x)
+end
+
+common.relu = function(x)
+  if not x then
+    xlua.error('x must be supplied',
+                'common.relu', 
+                help.relu)
+  end
+  return relu(x)
 end
 
 common.cross_entropy_error = function(y, t)
@@ -113,6 +134,15 @@ common.getElement = function(readTensor,...)
         help.getElement)
   end
   return getElement(readTensor,...)
+end
+
+common.thresMaxTensor = function(t)
+  if not t then
+    xlua.error('t must be supplied', 
+        'common.thresMaxTensort', 
+        help.thresMaxTensor)
+  end
+  return thresMaxTensor(t)
 end
 
 return common
