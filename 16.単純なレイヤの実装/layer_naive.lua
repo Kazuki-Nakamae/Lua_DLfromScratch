@@ -27,8 +27,8 @@ MulLayer.new = function()
 
     -- @function self.backward()
     -- 逆伝搬
-    -- @param dout 微分{Type:number}
-    -- @return 各要素からの増分{Type:number}
+    -- @param dout 層の出力に対する微分{Type:number}
+    -- @return 層の各入力に対する微分{Type:number}
     obj.backward = function(self, dout)
         local dx = dout * self.y
         local dy = dout * self.x
@@ -58,8 +58,8 @@ AddLayer.new = function()
 
     -- @function self.backward()
     -- 逆伝搬
-    -- @param dout 微分{Type:number}
-    -- @return 各要素からの増分{Type:number}
+    -- @param dout 層の出力に対する微分{Type:number}
+    -- @return 層の各入力に対する微分{Type:number}
     obj.backward = function(self, dout)
         local dx = dout * 1
         local dy = dout * 1
